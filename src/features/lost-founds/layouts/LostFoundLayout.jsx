@@ -27,10 +27,10 @@ function LostFoundLayout() {
   // Route guard 2: sesi masih diverifikasi
   if (isChecking) {
     return (
-      <div className="flex min-h-screen items-center justify-center gap-2 text-slate-500">
+      <main className="flex min-h-screen items-center justify-center gap-2 text-slate-600">
         <IconLoader2 size={22} className="animate-spin" />
-        Memuat sesi...
-      </div>
+        <h1 className="text-base font-normal">Memuat sesi...</h1>
+      </main>
     );
   }
 

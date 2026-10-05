@@ -64,13 +64,13 @@ function DetailPage() {
   };
 
   if (isLoading) {
-    return <p className="py-10 text-center text-slate-500">Memuat detail laporan...</p>;
+    return <h1 className="py-10 text-center text-base font-normal text-slate-500">Memuat detail laporan...</h1>;
   }
 
   if (!lostFound || String(lostFound.id) !== String(id)) {
     return (
       <div className="space-y-3 py-10 text-center">
-        <p className="text-slate-500">Laporan tidak ditemukan.</p>
+        <h1 className="text-base font-normal text-slate-500">Laporan tidak ditemukan.</h1>
         <Link to="/" className="inline-flex min-h-6 items-center font-semibold text-indigo-600 underline">
           Kembali ke Dashboard
         </Link>

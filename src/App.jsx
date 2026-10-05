@@ -11,9 +11,17 @@ const DetailPage = lazy(() => import("./features/lost-founds/pages/DetailPage"))
 const UsersPage = lazy(() => import("./features/users/pages/UsersPage"));
 const ProfilePage = lazy(() => import("./features/users/pages/ProfilePage"));
 
+// Tampilan sementara saat halaman dashboard sedang dimuat
+const pageFallback = (
+  <main className="flex min-h-screen flex-col items-center justify-center gap-3 bg-slate-100">
+    <img src="/logo.svg" alt="" width="56" height="56" />
+    <h1 className="text-lg font-bold text-slate-700">Lost &amp; Founds</h1>
+  </main>
+);
+
 function App() {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={pageFallback}>
       <Routes>
         {/* Rute autentikasi */}
         <Route path="/auth" element={<AuthLayout />}>
