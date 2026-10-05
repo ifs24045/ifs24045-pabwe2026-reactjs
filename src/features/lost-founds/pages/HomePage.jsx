@@ -220,7 +220,7 @@ function HomePage() {
               type="checkbox"
               checked={onlyMine}
               onChange={(event) => setOnlyMine(event.target.checked)}
-              className="h-4 w-4 accent-indigo-600"
+              className="h-6 w-6 accent-indigo-600"
             />
             Laporan saya
           </label>

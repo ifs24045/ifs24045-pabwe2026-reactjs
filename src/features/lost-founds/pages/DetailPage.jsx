@@ -71,8 +71,9 @@ function DetailPage() {
     return (
       <div className="space-y-3 py-10 text-center">
         <p className="text-slate-500">Laporan tidak ditemukan.</p>
-        <Link to="/" className="font-semibold text-indigo-600 hover:underline">
+        <Link to="/" className="font-semibold text-indigo-600 hover:underline min-h-6">
           Kembali ke Dashboard
+          min-h-6
         </Link>
       </div>
     );

@@ -104,7 +104,7 @@ function ChangeModalForm({ lostFound, onClose, onSuccess }) {
           role="switch"
           checked={isCompleted}
           onChange={(event) => setIsCompleted(event.target.checked)}
-          className="h-5 w-5 accent-indigo-600"
+          className="h-6 w-6 accent-indigo-600"
         />
       </label>
 
