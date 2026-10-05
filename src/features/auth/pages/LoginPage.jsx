@@ -54,11 +54,11 @@ function LoginPage() {
 
       <form onSubmit={handleSubmit} noValidate className="mt-8 space-y-5">
         <div>
-          <label htmlFor="email" className="block text-sm font-medium mb-1.5">
+         <label htmlFor="login-email-input" className="block text-sm font-medium mb-1.5">
             Email
           </label>
           <input
-            id="email"
+            id="login-email-input"
             type="email"
             value={email}
             onChange={onEmailChange}
@@ -71,12 +71,12 @@ function LoginPage() {
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-medium mb-1.5">
+          <label htmlFor="login-password-input" className="block text-sm font-medium mb-1.5">
             Kata Sandi
           </label>
           <div className="relative">
             <input
-              id="password"
+              id="login-password-input"
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={onPasswordChange}
@@ -98,6 +98,7 @@ function LoginPage() {
         </div>
 
         <button
+          id="login-submit-button"
           type="submit"
           disabled={isSubmitting}
           className="w-full flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 font-semibold text-white hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed"
