@@ -54,7 +54,7 @@ function LoginPage() {
 
       <form onSubmit={handleSubmit} noValidate className="mt-8 space-y-5">
         <div>
-         <label htmlFor="login-email-input" className="block text-sm font-medium mb-1.5">
+          <label htmlFor="login-email-input" className="block text-sm font-medium mb-1.5">
             Email
           </label>
           <input
@@ -87,7 +87,7 @@ function LoginPage() {
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
               aria-label={showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
-              className="absolute inset-y-0 right-1 px-2.5 text-slate-400 hover:text-slate-600"
+              className="absolute inset-y-0 right-1 px-2.5 text-slate-600 hover:text-slate-600"
             >
               {showPassword ? <IconEyeOff size={20} /> : <IconEye size={20} />}
             </button>

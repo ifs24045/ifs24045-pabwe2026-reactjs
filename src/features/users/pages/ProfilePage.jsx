@@ -161,7 +161,7 @@ function ProfilePhotoForm({ profile }) {
             onChange={handleFileChange}
             className="block text-sm text-slate-600 file:mr-3 file:rounded-lg file:border-0 file:bg-indigo-50 file:px-4 file:py-2 file:font-semibold file:text-indigo-600 hover:file:bg-indigo-100"
           />
-          <p className="mt-1 text-xs text-slate-400">Gambar, maksimal 2 MB.</p>
+          <p className="mt-1 text-xs text-slate-600">Gambar, maksimal 2 MB.</p>
         </div>
       </div>
       <button type="submit" disabled={isSubmitting || !file} className={buttonClass}>

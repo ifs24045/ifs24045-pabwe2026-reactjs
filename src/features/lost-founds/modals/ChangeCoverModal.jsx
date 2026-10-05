@@ -63,7 +63,7 @@ function ChangeCoverForm({ lostFound, onClose, onSuccess }) {
             className="h-full w-full object-contain"
           />
         ) : (
-          <div className="flex flex-col items-center gap-2 text-slate-400">
+          <div className="flex flex-col items-center gap-2 text-slate-600">
             <IconPhotoUp size={40} />
             <span className="text-sm">Belum ada cover</span>
           </div>
@@ -82,7 +82,7 @@ function ChangeCoverForm({ lostFound, onClose, onSuccess }) {
           onChange={handleFileChange}
           className="block w-full text-sm text-slate-600 file:mr-3 file:rounded-lg file:border-0 file:bg-indigo-50 file:px-4 file:py-2 file:font-semibold file:text-indigo-600 hover:file:bg-indigo-100"
         />
-        <p className="mt-1 text-xs text-slate-400">Gambar, maksimal 2 MB.</p>
+        <p className="mt-1 text-xs text-slate-600">Gambar, maksimal 2 MB.</p>
       </div>
 
       <div className="flex justify-end gap-3 pt-2">

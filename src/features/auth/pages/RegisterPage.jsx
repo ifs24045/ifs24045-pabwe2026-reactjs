@@ -118,7 +118,7 @@ function RegisterPage() {
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
               aria-label={showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
-              className="absolute inset-y-0 right-1 px-2.5 text-slate-400 hover:text-slate-600"
+              className="absolute inset-y-0 right-1 px-2.5 text-slate-600 hover:text-slate-600"
             >
               {showPassword ? <IconEyeOff size={20} /> : <IconEye size={20} />}
             </button>

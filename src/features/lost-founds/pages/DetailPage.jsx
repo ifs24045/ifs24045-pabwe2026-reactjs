@@ -71,9 +71,8 @@ function DetailPage() {
     return (
       <div className="space-y-3 py-10 text-center">
         <p className="text-slate-500">Laporan tidak ditemukan.</p>
-        <Link to="/" className="font-semibold text-indigo-600 hover:underline min-h-6">
+        <Link to="/" className="inline-flex min-h-6 items-center font-semibold text-indigo-600 underline">
           Kembali ke Dashboard
-          min-h-6
         </Link>
       </div>
     );
@@ -102,7 +101,7 @@ function DetailPage() {
               className="max-h-[28rem] w-auto max-w-full object-contain"
             />
           ) : (
-            <div className="flex flex-col items-center gap-2 py-12 text-slate-400">
+            <div className="flex flex-col items-center gap-2 py-12 text-slate-600">
               <IconPhoto size={48} />
               <span className="text-sm">Belum ada cover</span>
             </div>
@@ -112,16 +111,14 @@ function DetailPage() {
         <div className="space-y-4 p-6">
           <div className="flex flex-wrap items-center gap-2">
             <span
-              className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                isLost ? "bg-red-100 text-red-700" : "bg-emerald-100 text-emerald-700"
-              }`}
+              className={`rounded-full px-3 py-1 text-xs font-semibold ${isLost ? "bg-red-100 text-red-700" : "bg-emerald-100 text-emerald-700"
+                }`}
             >
               {isLost ? "Barang Hilang" : "Barang Ditemukan"}
             </span>
             <span
-              className={`flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold ${
-                isCompleted ? "bg-indigo-100 text-indigo-700" : "bg-amber-100 text-amber-700"
-              }`}
+              className={`flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold ${isCompleted ? "bg-indigo-100 text-indigo-700" : "bg-amber-100 text-amber-800"
+                }`}
             >
               {isCompleted ? <IconCircleCheck size={14} /> : <IconClockHour4 size={14} />}
               {isCompleted ? "Selesai" : "Dalam proses"}
@@ -132,17 +129,17 @@ function DetailPage() {
 
           <dl className="grid gap-3 text-sm sm:grid-cols-2">
             <div>
-              <dt className="text-slate-400">Pelapor</dt>
+              <dt className="text-slate-600">Pelapor</dt>
               <dd className="font-medium">{getAuthorName(lostFound.author)}</dd>
             </div>
             <div>
-              <dt className="text-slate-400">Tanggal lapor</dt>
+              <dt className="text-slate-600">Tanggal lapor</dt>
               <dd className="font-medium">{formatDate(lostFound.created_at)}</dd>
             </div>
           </dl>
 
           <div>
-            <h2 className="mb-1 text-sm text-slate-400">Deskripsi</h2>
+            <h2 className="mb-1 text-sm text-slate-600">Deskripsi</h2>
             <p className="whitespace-pre-line leading-relaxed text-slate-700">
               {lostFound.description}
             </p>

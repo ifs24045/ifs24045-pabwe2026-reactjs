@@ -60,9 +60,8 @@ function LostFoundCard({ item }) {
         <div className="flex flex-1 flex-col gap-2 p-4">
           <div className="flex flex-wrap items-center gap-2">
             <span
-              className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                isLost ? "bg-red-100 text-red-700" : "bg-emerald-100 text-emerald-700"
-              }`}
+              className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${isLost ? "bg-red-100 text-red-700" : "bg-emerald-100 text-emerald-700"
+                }`}
             >
               {isLost ? "Hilang" : "Ditemukan"}
             </span>
@@ -76,7 +75,7 @@ function LostFoundCard({ item }) {
           <h3 className="line-clamp-1 font-bold">{item.title}</h3>
           <p className="line-clamp-2 text-sm text-slate-500">{item.description}</p>
 
-          <p className="mt-auto pt-2 text-xs text-slate-400">
+          <p className="mt-auto pt-2 text-xs text-slate-600">
             {getAuthorName(item.author)} · {formatDate(item.created_at)}
           </p>
         </div>
@@ -87,7 +86,7 @@ function LostFoundCard({ item }) {
 
 function HomePage() {
   const dispatch = useDispatch();
-    const { hash } = useLocation();
+  const { hash } = useLocation();
 
   // Menu "Statistik" mengarah ke /#statistik
   useEffect(() => {
@@ -173,7 +172,7 @@ function HomePage() {
         <div className="relative">
           <IconSearch
             size={18}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600"
           />
           <input
             type="text"
@@ -193,11 +192,10 @@ function HomePage() {
                 type="button"
                 onClick={() => setStatusFilter(tab.value)}
                 aria-pressed={statusFilter === tab.value}
-                className={`rounded-lg px-4 py-1.5 text-sm font-medium ${
-                  statusFilter === tab.value
+                className={`rounded-lg px-4 py-1.5 text-sm font-medium ${statusFilter === tab.value
                     ? "bg-white text-indigo-700 shadow-sm"
                     : "text-slate-600 hover:text-slate-900"
-                }`}
+                  }`}
               >
                 {tab.label}
               </button>

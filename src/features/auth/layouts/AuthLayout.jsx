@@ -35,7 +35,7 @@ function AuthLayout() {
             </ul>
           </div>
 
-          <p className="text-sm text-indigo-200">Delcom Lost &amp; Founds</p>
+          <p className="text-sm text-indigo-50">Delcom Lost &amp; Founds</p>
         </aside>
 
         {/* Area form: isi diganti LoginPage / RegisterPage */}

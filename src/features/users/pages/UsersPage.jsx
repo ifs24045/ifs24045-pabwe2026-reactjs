@@ -46,7 +46,7 @@ function UsersPage() {
         <div className="relative w-full sm:w-72">
           <IconSearch
             size={18}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600"
           />
           <input
             type="text"
