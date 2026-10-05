@@ -13,13 +13,37 @@ const apiProxy = {
   },
 };
 
+// Saat build: CSS utama disisipkan langsung ke index.html agar tidak
+// memblokir render (menghemat satu request sebelum halaman tampil).
+const inlineCss = {
+  name: "inline-css",
+  apply: "build",
+  enforce: "post",
+  generateBundle(_, bundle) {
+    const html = bundle["index.html"];
+    if (!html) return;
+
+    let source = String(html.source);
+    for (const [fileName, chunk] of Object.entries(bundle)) {
+      if (!fileName.endsWith(".css") || chunk.type !== "asset") continue;
+
+      const linkTag = new RegExp(`<link rel="stylesheet"[^>]*href="/${fileName}"[^>]*>`);
+      if (!linkTag.test(source)) continue;
+
+      source = source.replace(linkTag, () => `<style>${chunk.source}</style>`);
+      delete bundle[fileName];
+    }
+    html.source = source;
+  },
+};
+
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const port = Number(env.APP_PORT) || 3000;
 
   return {
-    plugins: [react(), tailwindcss()],
+    plugins: [react(), tailwindcss(), inlineCss],
     server: {
       port,
       proxy: apiProxy,

@@ -15,8 +15,8 @@ describe("toolsHelper", () => {
   });
 
   describe("showSuccessDialog", () => {
-    it("menampilkan dialog sukses dengan pesan yang diberikan", () => {
-      showSuccessDialog("Data tersimpan");
+    it("menampilkan dialog sukses dengan pesan yang diberikan", async () => {
+      await showSuccessDialog("Data tersimpan");
 
       expect(Swal.fire).toHaveBeenCalledWith(
         expect.objectContaining({ icon: "success", text: "Data tersimpan" })
@@ -25,8 +25,8 @@ describe("toolsHelper", () => {
   });
 
   describe("showErrorDialog", () => {
-    it("menampilkan dialog error dengan pesan yang diberikan", () => {
-      showErrorDialog("Gagal menyimpan");
+    it("menampilkan dialog error dengan pesan yang diberikan", async () => {
+      await showErrorDialog("Gagal menyimpan");
 
       expect(Swal.fire).toHaveBeenCalledWith(
         expect.objectContaining({ icon: "error", text: "Gagal menyimpan" })

@@ -1,7 +1,12 @@
-import Swal from "sweetalert2";
+// SweetAlert2 dimuat saat dialog pertama kali dibutuhkan
+async function getSwal() {
+  const { default: Swal } = await import("sweetalert2");
+  return Swal;
+}
 
 /** Dialog sukses. */
-function showSuccessDialog(message, title = "Berhasil") {
+async function showSuccessDialog(message, title = "Berhasil") {
+  const Swal = await getSwal();
   return Swal.fire({
     icon: "success",
     title,
@@ -11,7 +16,8 @@ function showSuccessDialog(message, title = "Berhasil") {
 }
 
 /** Dialog error. */
-function showErrorDialog(message, title = "Terjadi Kesalahan") {
+async function showErrorDialog(message, title = "Terjadi Kesalahan") {
+  const Swal = await getSwal();
   return Swal.fire({
     icon: "error",
     title,
@@ -26,6 +32,7 @@ async function showConfirmDialog(
   title = "Apakah Anda yakin?",
   confirmText = "Ya"
 ) {
+  const Swal = await getSwal();
   const result = await Swal.fire({
     icon: "warning",
     title,
