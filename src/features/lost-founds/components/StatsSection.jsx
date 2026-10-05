@@ -100,7 +100,7 @@ function StatsSection() {
             </span>
           </div>
 
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Grafik statistik laporan">
             <div className="flex h-48 min-w-max items-end gap-5 border-b border-slate-200 px-2">
               {rows.map((row) => (
                 <div

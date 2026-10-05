@@ -19,9 +19,9 @@ function AuthLayout() {
           </div>
 
           <div className="space-y-6">
-            <h2 className="text-3xl font-extrabold leading-tight">
+            <p className="text-3xl font-extrabold leading-tight">
               Kehilangan sesuatu? Menemukan barang orang lain?
-            </h2>
+            </p>
             <ul className="space-y-3 text-indigo-100">
               <li className="flex items-center gap-3">
                 <IconSearch size={20} /> Laporkan barang hilang dengan cepat

@@ -157,7 +157,7 @@ function RegisterPage() {
 
       <p className="mt-6 text-center text-sm text-slate-500">
         Sudah punya akun?{" "}
-        <Link to="/auth/login" className="font-semibold text-indigo-600 hover:underline">
+        <Link to="/auth/login" className="font-semibold text-indigo-600 underline">
           Masuk
         </Link>
       </p>

@@ -3,22 +3,33 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import process from "process";
 
+// Meneruskan /api-proxy/* ke API Delcom saat dev dan preview lokal.
+// Di Netlify, hal yang sama dikerjakan oleh public/_redirects.
+const apiProxy = {
+  "/api-proxy": {
+    target: "https://open-api.delcom.org",
+    changeOrigin: true,
+    rewrite: (path) => path.replace(/^\/api-proxy/, "/api/v1"),
+  },
+};
+
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
+  const port = Number(env.APP_PORT) || 3000;
 
   return {
     plugins: [react(), tailwindcss()],
     server: {
-      port: Number(env.APP_PORT) || 3000,
+      port,
+      proxy: apiProxy,
     },
     preview: {
-      port: Number(env.APP_PORT) || 3000,
+      port,
+      proxy: apiProxy,
     },
     define: {
-      DELCOM_BASEURL: JSON.stringify(
-        env.VITE_DELCOM_BASEURL || "https://open-api.delcom.org/api/v1"
-      ),
+      DELCOM_BASEURL: JSON.stringify(env.VITE_DELCOM_BASEURL || "/api-proxy"),
     },
     test: {
       globals: true,

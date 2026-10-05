@@ -46,6 +46,8 @@ function LostFoundCard({ item }) {
         <div className="flex aspect-video items-center justify-center overflow-hidden bg-slate-100">
           {item.cover ? (
             <img
+              loading="lazy"
+              decoding="async"
               src={item.cover}
               alt={item.title}
               className="h-full w-full object-cover transition group-hover:scale-105"

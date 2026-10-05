@@ -98,7 +98,7 @@ function DetailPage() {
             <img
               src={lostFound.cover}
               alt={lostFound.title}
-              className="max-h-[28rem] w-full object-contain"
+              className="max-h-[28rem] w-auto max-w-full object-contain"
             />
           ) : (
             <div className="flex flex-col items-center gap-2 py-12 text-slate-400">

@@ -110,7 +110,7 @@ function LoginPage() {
 
       <p className="mt-6 text-center text-sm text-slate-500">
         Belum punya akun?{" "}
-        <Link to="/auth/register" className="font-semibold text-indigo-600 hover:underline">
+        <Link to="/auth/register" className="font-semibold text-indigo-600 underline">
           Daftar
         </Link>
       </p>

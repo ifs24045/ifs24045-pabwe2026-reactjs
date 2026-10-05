@@ -75,6 +75,8 @@ function UsersPage() {
             >
               {user.photo ? (
                 <img
+                  loading="lazy"
+                  decoding="async"
                   src={user.photo}
                   alt={user.name}
                   className="h-12 w-12 shrink-0 rounded-full object-cover"
