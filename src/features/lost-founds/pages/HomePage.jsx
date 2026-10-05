@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import AddModal from "../modals/AddModal";
 import StatsSection from "../components/StatsSection";
+import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   IconCircleCheck,
@@ -164,6 +164,8 @@ function HomePage() {
         <SummaryCard label="Selesai" value={summary.completed} tone="text-indigo-600" />
       </div>
 
+      {/* Statistik laporan (tujuan menu sidebar "Statistik") */}
+      <StatsSection />
       {/* Filter dan pencarian */}
       <div className="space-y-3 rounded-2xl border border-slate-200 bg-white p-4">
         <div className="relative">
