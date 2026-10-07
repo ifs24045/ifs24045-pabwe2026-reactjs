@@ -1,10 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector, useStore } from "react-redux";
+import PropTypes from "prop-types";
 import { IconLoader2, IconPhotoUp, IconX } from "@tabler/icons-react";
 import { asyncSetIsLostFoundChangeCover } from "../states/action";
 import { showErrorDialog } from "../../../helpers/toolsHelper";
 
 const MAX_COVER_SIZE = 2 * 1024 * 1024; // 2 MB
+
+const lostFoundShape = PropTypes.shape({
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  cover: PropTypes.string,
+});
 
 function ChangeCoverForm({ lostFound, onClose, onSuccess }) {
   const dispatch = useDispatch();
@@ -43,7 +49,7 @@ function ChangeCoverForm({ lostFound, onClose, onSuccess }) {
     event.preventDefault();
     if (!file) return showErrorDialog("Pilih gambar terlebih dahulu");
 
-    await dispatch(asyncSetIsLostFoundChangeCover(lostFound.id, file));
+    await Promise.resolve(dispatch(asyncSetIsLostFoundChangeCover(lostFound.id, file)));
 
     if (store.getState().isLostFoundChangedCover) {
       onClose();
@@ -106,6 +112,12 @@ function ChangeCoverForm({ lostFound, onClose, onSuccess }) {
   );
 }
 
+ChangeCoverForm.propTypes = {
+  lostFound: lostFoundShape.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSuccess: PropTypes.func,
+};
+
 function ChangeCoverModal({ isOpen, onClose, lostFound, onSuccess }) {
   useEffect(() => {
     if (!isOpen) return;
@@ -119,17 +131,19 @@ function ChangeCoverModal({ isOpen, onClose, lostFound, onSuccess }) {
   if (!isOpen || !lostFound) return null;
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4"
-      onMouseDown={(event) => {
-        if (event.target === event.currentTarget) onClose();
-      }}
-    >
-      <div
-        role="dialog"
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <button
+        type="button"
+        tabIndex={-1}
+        aria-label="Tutup latar belakang"
+        onClick={onClose}
+        className="absolute inset-0 cursor-default bg-slate-900/50"
+      />
+      <dialog
+        open
         aria-modal="true"
         aria-labelledby="cover-modal-title"
-        className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 shadow-xl"
+        className="relative m-0 max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 text-inherit shadow-xl"
       >
         <div className="mb-5 flex items-center justify-between">
           <h2 id="cover-modal-title" className="text-xl font-bold">
@@ -150,9 +164,16 @@ function ChangeCoverModal({ isOpen, onClose, lostFound, onSuccess }) {
           onClose={onClose}
           onSuccess={onSuccess}
         />
-      </div>
+      </dialog>
     </div>
   );
 }
+
+ChangeCoverModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  lostFound: lostFoundShape,
+  onSuccess: PropTypes.func,
+};
 
 export default ChangeCoverModal;

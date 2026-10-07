@@ -1,11 +1,20 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector, useStore } from "react-redux";
+import PropTypes from "prop-types";
 import { IconLoader2, IconX } from "@tabler/icons-react";
 import useInput from "../../../hooks/useInput";
 import { asyncSetIsLostFoundChange } from "../states/action";
 
 const inputClass =
   "w-full rounded-xl border border-slate-300 px-4 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200";
+
+const lostFoundShape = PropTypes.shape({
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  title: PropTypes.string,
+  description: PropTypes.string,
+  status: PropTypes.string,
+  is_completed: PropTypes.oneOfType([PropTypes.bool, PropTypes.number, PropTypes.string]),
+});
 
 function ChangeModalForm({ lostFound, onClose, onSuccess }) {
   const dispatch = useDispatch();
@@ -27,13 +36,15 @@ function ChangeModalForm({ lostFound, onClose, onSuccess }) {
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
-    await dispatch(
-      asyncSetIsLostFoundChange(lostFound.id, {
-        title,
-        description,
-        status,
-        isCompleted,
-      })
+    await Promise.resolve(
+      dispatch(
+        asyncSetIsLostFoundChange(lostFound.id, {
+          title,
+          description,
+          status,
+          isCompleted,
+        })
+      )
     );
 
     if (store.getState().isLostFoundChanged) {
@@ -88,25 +99,25 @@ function ChangeModalForm({ lostFound, onClose, onSuccess }) {
         )}
       </div>
 
-      <label
-        htmlFor="change-completed"
-        className="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3"
-      >
-        <span>
-          <span className="block text-sm font-medium">Status selesai</span>
-          <span className="block text-xs text-slate-500">
+      <div className="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3">
+        <div>
+          <label htmlFor="change-completed" className="block text-sm font-medium">
+            Status selesai
+          </label>
+          <span id="change-completed-hint" className="block text-xs text-slate-500">
             Tandai jika barang sudah kembali ke pemiliknya.
           </span>
-        </span>
+        </div>
         <input
           id="change-completed"
           type="checkbox"
           role="switch"
+          aria-describedby="change-completed-hint"
           checked={isCompleted}
           onChange={(event) => setIsCompleted(event.target.checked)}
           className="h-6 w-6 accent-indigo-600"
         />
-      </label>
+      </div>
 
       <div className="flex justify-end gap-3 pt-2">
         <button
@@ -129,6 +140,12 @@ function ChangeModalForm({ lostFound, onClose, onSuccess }) {
   );
 }
 
+ChangeModalForm.propTypes = {
+  lostFound: lostFoundShape.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSuccess: PropTypes.func,
+};
+
 function ChangeModal({ isOpen, onClose, lostFound, onSuccess }) {
   useEffect(() => {
     if (!isOpen) return;
@@ -142,17 +159,19 @@ function ChangeModal({ isOpen, onClose, lostFound, onSuccess }) {
   if (!isOpen || !lostFound) return null;
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4"
-      onMouseDown={(event) => {
-        if (event.target === event.currentTarget) onClose();
-      }}
-    >
-      <div
-        role="dialog"
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <button
+        type="button"
+        tabIndex={-1}
+        aria-label="Tutup latar belakang"
+        onClick={onClose}
+        className="absolute inset-0 cursor-default bg-slate-900/50"
+      />
+      <dialog
+        open
         aria-modal="true"
         aria-labelledby="change-modal-title"
-        className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 shadow-xl"
+        className="relative m-0 max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 text-inherit shadow-xl"
       >
         <div className="mb-5 flex items-center justify-between">
           <h2 id="change-modal-title" className="text-xl font-bold">
@@ -173,9 +192,16 @@ function ChangeModal({ isOpen, onClose, lostFound, onSuccess }) {
           onClose={onClose}
           onSuccess={onSuccess}
         />
-      </div>
+      </dialog>
     </div>
   );
 }
+
+ChangeModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  lostFound: lostFoundShape,
+  onSuccess: PropTypes.func,
+};
 
 export default ChangeModal;

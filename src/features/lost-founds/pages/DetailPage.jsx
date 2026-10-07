@@ -56,7 +56,7 @@ function DetailPage() {
     );
     if (!confirmed) return;
 
-    await dispatch(asyncSetIsLostFoundDelete(id));
+    await Promise.resolve(dispatch(asyncSetIsLostFoundDelete(id)));
 
     if (store.getState().isLostFoundDeleted) {
       navigate("/", { replace: true });
@@ -111,14 +111,16 @@ function DetailPage() {
         <div className="space-y-4 p-6">
           <div className="flex flex-wrap items-center gap-2">
             <span
-              className={`rounded-full px-3 py-1 text-xs font-semibold ${isLost ? "bg-red-100 text-red-700" : "bg-emerald-100 text-emerald-700"
-                }`}
+              className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                isLost ? "bg-red-100 text-red-700" : "bg-emerald-100 text-emerald-700"
+              }`}
             >
               {isLost ? "Barang Hilang" : "Barang Ditemukan"}
             </span>
             <span
-              className={`flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold ${isCompleted ? "bg-indigo-100 text-indigo-700" : "bg-amber-100 text-amber-800"
-                }`}
+              className={`flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold ${
+                isCompleted ? "bg-indigo-100 text-indigo-700" : "bg-amber-100 text-amber-800"
+              }`}
             >
               {isCompleted ? <IconCircleCheck size={14} /> : <IconClockHour4 size={14} />}
               {isCompleted ? "Selesai" : "Dalam proses"}

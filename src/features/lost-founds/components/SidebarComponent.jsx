@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import PropTypes from "prop-types";
 import {
   IconChartBar,
   IconLayoutDashboard,
@@ -43,10 +44,13 @@ function SidebarComponent({ isOpen, onClose }) {
     <>
       {/* Overlay untuk mobile */}
       {isOpen && (
-        <div
+        <button
+          type="button"
           data-testid="sidebar-overlay"
+          aria-label="Tutup latar menu"
+          tabIndex={-1}
           onClick={onClose}
-          className="fixed inset-0 z-40 bg-slate-900/40 md:hidden"
+          className="fixed inset-0 z-40 cursor-default bg-slate-900/40 md:hidden"
         />
       )}
 
@@ -93,5 +97,10 @@ function SidebarComponent({ isOpen, onClose }) {
     </>
   );
 }
+
+SidebarComponent.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
 
 export default SidebarComponent;

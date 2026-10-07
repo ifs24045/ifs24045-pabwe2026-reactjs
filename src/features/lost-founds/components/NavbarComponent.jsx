@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import PropTypes from "prop-types";
 import { IconLogout, IconMenu2, IconUser } from "@tabler/icons-react";
 import { asyncSetIsAuthLogout } from "../../auth/states/action";
 import {
@@ -46,7 +47,7 @@ function NavbarComponent({ onMenuClick }) {
     );
     if (!confirmed) return;
 
-    await dispatch(asyncSetIsAuthLogout());
+    await Promise.resolve(dispatch(asyncSetIsAuthLogout()));
     dispatch(setProfileActionCreator(null));
     dispatch(setIsProfileActionCreator(false));
     navigate("/auth/login", { replace: true });
@@ -72,7 +73,7 @@ function NavbarComponent({ onMenuClick }) {
       <div className="flex items-center gap-3">
         <span className="hidden items-center gap-1.5 text-sm text-slate-500 sm:flex">
           <span className="h-2 w-2 rounded-full bg-emerald-500" />
-          Sedang masuk
+          <span>Sedang masuk</span>
         </span>
 
         <div className="relative" ref={menuRef}>
@@ -131,5 +132,9 @@ function NavbarComponent({ onMenuClick }) {
     </header>
   );
 }
+
+NavbarComponent.propTypes = {
+  onMenuClick: PropTypes.func.isRequired,
+};
 
 export default NavbarComponent;

@@ -35,7 +35,9 @@ function StatsSection() {
 
     const losts = data.stats_losts ?? {};
     const founds = data.stats_founds ?? {};
-    const keys = [...new Set([...Object.keys(losts), ...Object.keys(founds)])].sort();
+    const keys = [...new Set([...Object.keys(losts), ...Object.keys(founds)])].sort((a, b) =>
+      a.localeCompare(b)
+    );
 
     const builtRows = keys.map((key) => ({
       key,
@@ -55,6 +57,14 @@ function StatsSection() {
     };
   }, [data]);
 
+  let message = null;
+  if (!stats) {
+    message = "Memuat statistik...";
+  }
+  if (stats && rows.length === 0) {
+    message = "Belum ada data statistik.";
+  }
+
   return (
     <section
       id="statistik"
@@ -66,7 +76,8 @@ function StatsSection() {
           <p className="text-sm text-slate-500">Jumlah laporan per periode.</p>
         </div>
 
-        <div className="flex gap-1 rounded-xl bg-slate-100 p-1" role="group" aria-label="Periode statistik">
+        <fieldset className="flex gap-1 rounded-xl bg-slate-100 p-1">
+          <legend className="sr-only">Periode statistik</legend>
           {PERIODS.map((item) => (
             <button
               key={item.value}
@@ -82,13 +93,11 @@ function StatsSection() {
               {item.label}
             </button>
           ))}
-        </div>
+        </fieldset>
       </div>
 
-      {!stats ? (
-        <p className="py-8 text-center text-slate-500">Memuat statistik...</p>
-      ) : rows.length === 0 ? (
-        <p className="py-8 text-center text-slate-500">Belum ada data statistik.</p>
+      {message ? (
+        <p className="py-8 text-center text-slate-500">{message}</p>
       ) : (
         <>
           <div className="flex items-center gap-4 text-sm text-slate-600">
@@ -100,13 +109,12 @@ function StatsSection() {
             </span>
           </div>
 
-          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Grafik statistik laporan">
+          <section className="overflow-x-auto" aria-label="Grafik statistik laporan">
             <div className="flex h-48 min-w-max items-end gap-5 border-b border-slate-200 px-2">
               {rows.map((row) => (
-                <div
+                <figure
                   key={row.key}
                   className="flex h-full flex-col items-center justify-end gap-1"
-                  role="img"
                   aria-label={`${formatKey(row.key)}: ${row.lost} hilang, ${row.found} ditemukan`}
                 >
                   <div className="flex h-full items-end gap-1.5">
@@ -124,7 +132,7 @@ function StatsSection() {
                       </div>
                     ))}
                   </div>
-                </div>
+                </figure>
               ))}
             </div>
 
@@ -135,7 +143,7 @@ function StatsSection() {
                 </p>
               ))}
             </div>
-          </div>
+          </section>
 
           <dl className="grid grid-cols-2 gap-3 pt-2 text-sm lg:grid-cols-4">
             <div className="rounded-xl bg-red-50 p-3">

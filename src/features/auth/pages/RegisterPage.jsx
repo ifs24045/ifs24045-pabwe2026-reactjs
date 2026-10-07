@@ -58,7 +58,7 @@ function RegisterPage() {
     if (Object.keys(validationErrors).length > 0) return;
 
     setIsSubmitting(true);
-    await dispatch(asyncSetIsAuthRegister({ name, email, password }));
+    await Promise.resolve(dispatch(asyncSetIsAuthRegister({ name, email, password })));
     setIsSubmitting(false);
   };
 

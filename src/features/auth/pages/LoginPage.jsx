@@ -43,7 +43,7 @@ function LoginPage() {
     if (Object.keys(validationErrors).length > 0) return;
 
     setIsSubmitting(true);
-    await dispatch(asyncSetIsAuthLogin({ email, password }));
+    await Promise.resolve(dispatch(asyncSetIsAuthLogin({ email, password })));
     setIsSubmitting(false);
   };
 

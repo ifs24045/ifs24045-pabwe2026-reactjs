@@ -35,6 +35,47 @@ function UsersPage() {
     );
   }, [users, keyword]);
 
+  let listContent;
+  if (isLoading) {
+    listContent = <p className="mt-10 text-center text-slate-500">Memuat pengguna...</p>;
+  } else if (filteredUsers.length === 0) {
+    listContent = (
+      <div className="mt-10 flex flex-col items-center gap-2 text-slate-500">
+        <IconUsers size={40} />
+        <p>Tidak ada pengguna yang ditemukan.</p>
+      </div>
+    );
+  } else {
+    listContent = (
+      <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {filteredUsers.map((user) => (
+          <li
+            key={user.id}
+            className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+          >
+            {user.photo ? (
+              <img
+                loading="lazy"
+                decoding="async"
+                src={user.photo}
+                alt={user.name}
+                className="h-12 w-12 shrink-0 rounded-full object-cover"
+              />
+            ) : (
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-indigo-100 font-bold text-indigo-600">
+                {getInitials(user.name)}
+              </div>
+            )}
+            <div className="min-w-0">
+              <p className="truncate font-semibold">{user.name}</p>
+              <p className="truncate text-sm text-slate-500">{user.email}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    );
+  }
+
   return (
     <div>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -59,41 +100,7 @@ function UsersPage() {
         </div>
       </div>
 
-      {isLoading ? (
-        <p className="mt-10 text-center text-slate-500">Memuat pengguna...</p>
-      ) : filteredUsers.length === 0 ? (
-        <div className="mt-10 flex flex-col items-center gap-2 text-slate-500">
-          <IconUsers size={40} />
-          <p>Tidak ada pengguna yang ditemukan.</p>
-        </div>
-      ) : (
-        <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredUsers.map((user) => (
-            <li
-              key={user.id}
-              className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
-            >
-              {user.photo ? (
-                <img
-                  loading="lazy"
-                  decoding="async"
-                  src={user.photo}
-                  alt={user.name}
-                  className="h-12 w-12 shrink-0 rounded-full object-cover"
-                />
-              ) : (
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-indigo-100 font-bold text-indigo-600">
-                  {getInitials(user.name)}
-                </div>
-              )}
-              <div className="min-w-0">
-                <p className="truncate font-semibold">{user.name}</p>
-                <p className="truncate text-sm text-slate-500">{user.email}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+      {listContent}
     </div>
   );
 }

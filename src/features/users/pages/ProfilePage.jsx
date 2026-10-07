@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector, useStore } from "react-redux";
+import PropTypes from "prop-types";
 import { IconLoader2 } from "@tabler/icons-react";
 import useInput from "../../../hooks/useInput";
 import {
@@ -16,6 +17,12 @@ const inputClass =
   "w-full rounded-xl border border-slate-300 px-4 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200";
 const buttonClass =
   "flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 font-semibold text-white hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed";
+
+const profileShape = PropTypes.shape({
+  name: PropTypes.string,
+  email: PropTypes.string,
+  photo: PropTypes.string,
+});
 
 function getInitials(name = "") {
   return name
@@ -36,6 +43,12 @@ function Card({ title, description, children }) {
   );
 }
 
+Card.propTypes = {
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string,
+  children: PropTypes.node,
+};
+
 /* ---------- Ubah data profil ---------- */
 function ProfileInfoForm({ profile }) {
   const dispatch = useDispatch();
@@ -55,7 +68,7 @@ function ProfileInfoForm({ profile }) {
     if (Object.keys(newErrors).length > 0) return;
 
     setIsSubmitting(true);
-    await dispatch(asyncSetIsChangeProfile({ name, email }));
+    await Promise.resolve(dispatch(asyncSetIsChangeProfile({ name, email })));
     setIsSubmitting(false);
   };
 
@@ -88,6 +101,10 @@ function ProfileInfoForm({ profile }) {
     </form>
   );
 }
+
+ProfileInfoForm.propTypes = {
+  profile: profileShape.isRequired,
+};
 
 /* ---------- Ganti foto ---------- */
 function ProfilePhotoForm({ profile }) {
@@ -124,7 +141,7 @@ function ProfilePhotoForm({ profile }) {
     if (!file) return showErrorDialog("Pilih foto terlebih dahulu");
 
     setIsSubmitting(true);
-    await dispatch(asyncSetIsChangeProfilePhoto(file));
+    await Promise.resolve(dispatch(asyncSetIsChangeProfilePhoto(file)));
     setIsSubmitting(false);
 
     if (store.getState().isChangeProfilePhoto) {
@@ -172,6 +189,10 @@ function ProfilePhotoForm({ profile }) {
   );
 }
 
+ProfilePhotoForm.propTypes = {
+  profile: profileShape.isRequired,
+};
+
 /* ---------- Ganti kata sandi ---------- */
 function ProfilePasswordForm() {
   const dispatch = useDispatch();
@@ -196,7 +217,7 @@ function ProfilePasswordForm() {
     if (Object.keys(newErrors).length > 0) return;
 
     setIsSubmitting(true);
-    await dispatch(asyncSetIsChangeProfilePassword({ password, newPassword }));
+    await Promise.resolve(dispatch(asyncSetIsChangeProfilePassword({ password, newPassword })));
     setIsSubmitting(false);
 
     if (store.getState().isChangeProfilePassword) {

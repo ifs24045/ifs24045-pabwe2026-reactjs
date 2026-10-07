@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector, useStore } from "react-redux";
+import PropTypes from "prop-types";
 import { IconLoader2, IconX } from "@tabler/icons-react";
 import useInput from "../../../hooks/useInput";
 import { asyncSetIsLostFoundAdd } from "../states/action";
@@ -26,7 +27,7 @@ function AddModalForm({ onClose, onSuccess }) {
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
-    await dispatch(asyncSetIsLostFoundAdd({ title, description, status }));
+    await Promise.resolve(dispatch(asyncSetIsLostFoundAdd({ title, description, status })));
 
     if (store.getState().isLostFoundAdded) {
       onClose();
@@ -117,6 +118,11 @@ function AddModalForm({ onClose, onSuccess }) {
   );
 }
 
+AddModalForm.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  onSuccess: PropTypes.func,
+};
+
 function AddModal({ isOpen, onClose, onSuccess }) {
   // Tutup dengan tombol Escape
   useEffect(() => {
@@ -131,17 +137,19 @@ function AddModal({ isOpen, onClose, onSuccess }) {
   if (!isOpen) return null;
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4"
-      onMouseDown={(event) => {
-        if (event.target === event.currentTarget) onClose();
-      }}
-    >
-      <div
-        role="dialog"
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <button
+        type="button"
+        tabIndex={-1}
+        aria-label="Tutup latar belakang"
+        onClick={onClose}
+        className="absolute inset-0 cursor-default bg-slate-900/50"
+      />
+      <dialog
+        open
         aria-modal="true"
         aria-labelledby="add-modal-title"
-        className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 shadow-xl"
+        className="relative m-0 max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 text-inherit shadow-xl"
       >
         <div className="mb-5 flex items-center justify-between">
           <h2 id="add-modal-title" className="text-xl font-bold">
@@ -158,9 +166,15 @@ function AddModal({ isOpen, onClose, onSuccess }) {
         </div>
 
         <AddModalForm onClose={onClose} onSuccess={onSuccess} />
-      </div>
+      </dialog>
     </div>
   );
 }
+
+AddModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSuccess: PropTypes.func,
+};
 
 export default AddModal;

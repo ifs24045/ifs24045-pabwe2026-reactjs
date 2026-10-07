@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import StatsSection from "../components/StatsSection";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import PropTypes from "prop-types";
 import {
   IconCircleCheck,
   IconPhoto,
@@ -33,6 +34,12 @@ function SummaryCard({ label, value, tone }) {
   );
 }
 
+SummaryCard.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  tone: PropTypes.string,
+};
+
 function LostFoundCard({ item }) {
   const isLost = item.status === "lost";
   const isCompleted = Boolean(Number(item.is_completed));
@@ -60,8 +67,9 @@ function LostFoundCard({ item }) {
         <div className="flex flex-1 flex-col gap-2 p-4">
           <div className="flex flex-wrap items-center gap-2">
             <span
-              className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${isLost ? "bg-red-100 text-red-700" : "bg-emerald-100 text-emerald-700"
-                }`}
+              className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                isLost ? "bg-red-100 text-red-700" : "bg-emerald-100 text-emerald-700"
+              }`}
             >
               {isLost ? "Hilang" : "Ditemukan"}
             </span>
@@ -83,6 +91,22 @@ function LostFoundCard({ item }) {
     </li>
   );
 }
+
+LostFoundCard.propTypes = {
+  item: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    title: PropTypes.string,
+    description: PropTypes.string,
+    status: PropTypes.string,
+    cover: PropTypes.string,
+    is_completed: PropTypes.oneOfType([PropTypes.bool, PropTypes.number, PropTypes.string]),
+    created_at: PropTypes.string,
+    author: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.shape({ name: PropTypes.string }),
+    ]),
+  }).isRequired,
+};
 
 function HomePage() {
   const dispatch = useDispatch();
@@ -141,6 +165,23 @@ function HomePage() {
     });
   }, [lostFounds, keyword, statusFilter, completedFilter]);
 
+  let listContent;
+  if (isLoading) {
+    listContent = <p className="py-10 text-center text-slate-500">Memuat laporan...</p>;
+  } else if (filteredLostFounds.length === 0) {
+    listContent = (
+      <p className="py-10 text-center text-slate-500">Tidak ada laporan yang cocok.</p>
+    );
+  } else {
+    listContent = (
+      <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {filteredLostFounds.map((item) => (
+          <LostFoundCard key={item.id} item={item} />
+        ))}
+      </ul>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -167,6 +208,7 @@ function HomePage() {
 
       {/* Statistik laporan (tujuan menu sidebar "Statistik") */}
       <StatsSection />
+
       {/* Filter dan pencarian */}
       <div className="space-y-3 rounded-2xl border border-slate-200 bg-white p-4">
         <div className="relative">
@@ -185,22 +227,24 @@ function HomePage() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <div className="flex gap-1 rounded-xl bg-slate-100 p-1" role="group" aria-label="Filter jenis">
+          <fieldset className="flex gap-1 rounded-xl bg-slate-100 p-1">
+            <legend className="sr-only">Filter jenis</legend>
             {STATUS_TABS.map((tab) => (
               <button
                 key={tab.value}
                 type="button"
                 onClick={() => setStatusFilter(tab.value)}
                 aria-pressed={statusFilter === tab.value}
-                className={`rounded-lg px-4 py-1.5 text-sm font-medium ${statusFilter === tab.value
+                className={`rounded-lg px-4 py-1.5 text-sm font-medium ${
+                  statusFilter === tab.value
                     ? "bg-white text-indigo-700 shadow-sm"
                     : "text-slate-600 hover:text-slate-900"
-                  }`}
+                }`}
               >
                 {tab.label}
               </button>
             ))}
-          </div>
+          </fieldset>
 
           <select
             value={completedFilter}
@@ -220,25 +264,13 @@ function HomePage() {
               onChange={(event) => setOnlyMine(event.target.checked)}
               className="h-6 w-6 accent-indigo-600"
             />
-            Laporan saya
+            <span>Laporan saya</span>
           </label>
         </div>
       </div>
 
       {/* Daftar laporan */}
-      {isLoading ? (
-        <p className="py-10 text-center text-slate-500">Memuat laporan...</p>
-      ) : filteredLostFounds.length === 0 ? (
-        <p className="py-10 text-center text-slate-500">
-          Tidak ada laporan yang cocok.
-        </p>
-      ) : (
-        <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {filteredLostFounds.map((item) => (
-            <LostFoundCard key={item.id} item={item} />
-          ))}
-        </ul>
-      )}
+      {listContent}
 
       <AddModal
         isOpen={isAddOpen}
