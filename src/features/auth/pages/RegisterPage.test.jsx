@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { screen, waitFor } from "@testing-library/react";
+import { act, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Route, Routes } from "react-router-dom";
 import { renderWithProviders } from "../../../test-utils";
@@ -94,6 +94,29 @@ describe("RegisterPage", () => {
     expect(asyncSetIsAuthRegister).not.toHaveBeenCalled();
   });
 
+  it("menampilkan dan menyembunyikan kata sandi saat tombol mata ditekan", async () => {
+    const user = userEvent.setup();
+    renderRegister();
+
+    const password = screen.getByLabelText("Kata Sandi");
+    const confirmPassword = screen.getByLabelText("Konfirmasi Kata Sandi");
+    expect(password).toHaveAttribute("type", "password");
+    expect(confirmPassword).toHaveAttribute("type", "password");
+
+    await user.click(screen.getByRole("button", { name: "Tampilkan kata sandi" }));
+
+    expect(password).toHaveAttribute("type", "text");
+    expect(confirmPassword).toHaveAttribute("type", "text");
+
+    await user.click(screen.getByRole("button", { name: "Sembunyikan kata sandi" }));
+
+    expect(password).toHaveAttribute("type", "password");
+    expect(confirmPassword).toHaveAttribute("type", "password");
+    expect(
+      screen.getByRole("button", { name: "Tampilkan kata sandi" })
+    ).toBeInTheDocument();
+  });
+
   it("memanggil registrasi tanpa field konfirmasi jika data valid", async () => {
     const user = userEvent.setup();
     renderRegister();
@@ -113,6 +136,34 @@ describe("RegisterPage", () => {
         password: "123456",
       })
     );
+  });
+
+  it("menonaktifkan tombol dan menampilkan 'Memproses...' selama registrasi berjalan", async () => {
+    let resolveRegister;
+    asyncSetIsAuthRegister.mockImplementationOnce(
+      () => () =>
+        new Promise((resolve) => {
+          resolveRegister = resolve;
+        })
+    );
+    const user = userEvent.setup();
+    renderRegister();
+
+    await fillForm(user, {
+      name: "Budi",
+      email: "budi@b.com",
+      password: "123456",
+      confirmPassword: "123456",
+    });
+    await user.click(screen.getByRole("button", { name: "Daftar" }));
+
+    expect(await screen.findByRole("button", { name: "Memproses..." })).toBeDisabled();
+
+    await act(async () => {
+      resolveRegister();
+    });
+
+    expect(await screen.findByRole("button", { name: "Daftar" })).toBeEnabled();
   });
 
   it("berpindah ke halaman login dan mereset status setelah registrasi sukses", async () => {

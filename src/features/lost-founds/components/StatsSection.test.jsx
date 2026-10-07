@@ -82,11 +82,18 @@ describe("StatsSection", () => {
       expect(screen.getByText("Belum ada data statistik.")).toBeInTheDocument();
     });
 
-    it("tetap aman jika salah satu kelompok data tidak ada", () => {
+    it("tetap aman jika data hilang (stats_losts) tidak ada", () => {
       renderStats({ daily: { stats_founds: { "2026-10-04": 2 } } });
 
       expect(screen.getByRole("figure", { name: "04/10: 0 hilang, 2 ditemukan" })).toBeInTheDocument();
       expect(totalOf("Hilang · selesai")).toHaveTextContent("0");
+    });
+
+    it("tetap aman jika data ditemukan (stats_founds) tidak ada", () => {
+      renderStats({ daily: { stats_losts: { "2026-10-04": 2 } } });
+
+      expect(screen.getByRole("figure", { name: "04/10: 2 hilang, 0 ditemukan" })).toBeInTheDocument();
+      expect(totalOf("Ditemukan · selesai")).toHaveTextContent("0");
     });
   });
 
