@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector, useStore } from "react-redux";
 import PropTypes from "prop-types";
-import { IconLoader2, IconPhotoUp, IconX } from "@tabler/icons-react";
+import { IconPhotoUp } from "@tabler/icons-react";
 import { asyncSetIsLostFoundChangeCover } from "../states/action";
 import { showErrorDialog } from "../../../helpers/toolsHelper";
+import ModalShell from "./ModalShell";
+import FormActions from "./FormActions";
 
 const MAX_COVER_SIZE = 2 * 1024 * 1024; // 2 MB
 
@@ -28,19 +30,21 @@ function ChangeCoverForm({ lostFound, onClose, onSuccess }) {
     };
   }, [previewUrl]);
 
+  const rejectFile = (message) => {
+    showErrorDialog(message);
+    setFile(null);
+    setInputKey((key) => key + 1);
+  };
+
   const handleFileChange = (event) => {
     const selected = event.target.files?.[0];
     if (!selected) return setFile(null);
 
     if (!selected.type.startsWith("image/")) {
-      showErrorDialog("File harus berupa gambar");
-      setFile(null);
-      return setInputKey((key) => key + 1);
+      return rejectFile("File harus berupa gambar");
     }
     if (selected.size > MAX_COVER_SIZE) {
-      showErrorDialog("Ukuran gambar maksimal 2 MB");
-      setFile(null);
-      return setInputKey((key) => key + 1);
+      return rejectFile("Ukuran gambar maksimal 2 MB");
     }
     setFile(selected);
   };
@@ -91,23 +95,12 @@ function ChangeCoverForm({ lostFound, onClose, onSuccess }) {
         <p className="mt-1 text-xs text-slate-600">Gambar, maksimal 2 MB.</p>
       </div>
 
-      <div className="flex justify-end gap-3 pt-2">
-        <button
-          type="button"
-          onClick={onClose}
-          className="rounded-xl border border-slate-300 px-5 py-2.5 font-semibold text-slate-600 hover:bg-slate-50"
-        >
-          Batal
-        </button>
-        <button
-          type="submit"
-          disabled={isLoading || !file}
-          className="flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 font-semibold text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {isLoading && <IconLoader2 size={18} className="animate-spin" />}
-          Unggah Cover
-        </button>
-      </div>
+      <FormActions
+        onCancel={onClose}
+        submitLabel="Unggah Cover"
+        disabled={isLoading || !file}
+        isLoading={isLoading}
+      />
     </form>
   );
 }
@@ -119,53 +112,21 @@ ChangeCoverForm.propTypes = {
 };
 
 function ChangeCoverModal({ isOpen, onClose, lostFound, onSuccess }) {
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
-
-  if (!isOpen || !lostFound) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <button
-        type="button"
-        tabIndex={-1}
-        aria-label="Tutup latar belakang"
-        onClick={onClose}
-        className="absolute inset-0 cursor-default bg-slate-900/50"
-      />
-      <dialog
-        open
-        aria-modal="true"
-        aria-labelledby="cover-modal-title"
-        className="relative m-0 max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 text-inherit shadow-xl"
-      >
-        <div className="mb-5 flex items-center justify-between">
-          <h2 id="cover-modal-title" className="text-xl font-bold">
-            Ubah Cover
-          </h2>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Tutup"
-            className="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100"
-          >
-            <IconX size={20} />
-          </button>
-        </div>
-
+    <ModalShell
+      isOpen={isOpen && Boolean(lostFound)}
+      onClose={onClose}
+      title="Ubah Cover"
+      titleId="cover-modal-title"
+    >
+      {lostFound && (
         <ChangeCoverForm
           lostFound={lostFound}
           onClose={onClose}
           onSuccess={onSuccess}
         />
-      </dialog>
-    </div>
+      )}
+    </ModalShell>
   );
 }
 
