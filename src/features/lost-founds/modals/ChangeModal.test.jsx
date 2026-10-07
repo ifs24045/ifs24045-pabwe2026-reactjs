@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "../../../test-utils";
 import ChangeModal from "./ChangeModal";
@@ -134,7 +135,7 @@ describe("ChangeModal", () => {
 
       await user.click(screen.getByRole("button", { name: "Tutup latar belakang" }));
       expect(onClose).toHaveBeenCalledTimes(1);
-      });
+    });
   });
 
   describe("validasi", () => {
