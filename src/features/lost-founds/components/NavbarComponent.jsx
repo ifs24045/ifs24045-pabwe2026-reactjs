@@ -71,10 +71,10 @@ function NavbarComponent({ onMenuClick }) {
       </div>
 
       <div className="flex items-center gap-3">
-        <span className="hidden items-center gap-1.5 text-sm text-slate-500 sm:flex">
-          <span className="h-2 w-2 rounded-full bg-emerald-500" />
+        <div className="hidden items-center gap-1.5 text-sm text-slate-500 sm:flex">
+          <div aria-hidden="true" className="h-2 w-2 rounded-full bg-emerald-500" />
           <span>Sedang masuk</span>
-        </span>
+      </div>
 
         <div className="relative" ref={menuRef}>
           <button

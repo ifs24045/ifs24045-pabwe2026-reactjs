@@ -36,15 +36,18 @@ function LoginPage() {
   }, [isAuthLogin, navigate]);
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
+  event.preventDefault();
 
-    const validationErrors = validate({ email, password });
-    setErrors(validationErrors);
-    if (Object.keys(validationErrors).length > 0) return;
+  const validationErrors = validate({ email, password });
+  setErrors(validationErrors);
+  if (Object.keys(validationErrors).length > 0) return;
 
-    setIsSubmitting(true);
+  setIsSubmitting(true);
+  try {
     await Promise.resolve(dispatch(asyncSetIsAuthLogin({ email, password })));
+  } finally {
     setIsSubmitting(false);
+  }
   };
 
   return (
