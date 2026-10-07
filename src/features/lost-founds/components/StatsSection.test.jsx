@@ -85,7 +85,7 @@ describe("StatsSection", () => {
     it("tetap aman jika salah satu kelompok data tidak ada", () => {
       renderStats({ daily: { stats_founds: { "2026-10-04": 2 } } });
 
-      expect(screen.getByRole("img", { name: "04/10: 0 hilang, 2 ditemukan" })).toBeInTheDocument();
+      expect(screen.getByRole("figure", { name: "04/10: 0 hilang, 2 ditemukan" })).toBeInTheDocument();
       expect(totalOf("Hilang · selesai")).toHaveTextContent("0");
     });
   });
@@ -94,7 +94,7 @@ describe("StatsSection", () => {
     it("menampilkan satu kolom per tanggal, terurut, dengan label yang benar", () => {
       renderStats();
 
-      const bars = screen.getAllByRole("img");
+      const bars = screen.getAllByRole("figure");
       expect(bars.map((el) => el.getAttribute("aria-label"))).toEqual([
         "03/10: 2 hilang, 0 ditemukan",
         "04/10: 5 hilang, 3 ditemukan",
@@ -153,7 +153,7 @@ describe("StatsSection", () => {
       expect(screen.getByRole("button", { name: "Bulanan" })).toHaveAttribute("aria-pressed", "true");
       expect(screen.getByRole("button", { name: "Harian" })).toHaveAttribute("aria-pressed", "false");
       expect(
-        screen.getAllByRole("img").map((el) => el.getAttribute("aria-label"))
+        screen.getAllByRole("figure").map((el) => el.getAttribute("aria-label"))
       ).toEqual(["09/2026: 4 hilang, 0 ditemukan", "10/2026: 0 hilang, 1 ditemukan"]);
       expect(totalOf("Hilang · selesai")).toHaveTextContent("3");
       expect(totalOf("Ditemukan · proses")).toHaveTextContent("1");
@@ -166,7 +166,7 @@ describe("StatsSection", () => {
       await user.click(screen.getByRole("button", { name: "Bulanan" }));
       await user.click(screen.getByRole("button", { name: "Harian" }));
 
-      expect(screen.getByRole("img", { name: "04/10: 5 hilang, 3 ditemukan" })).toBeInTheDocument();
+      expect(screen.getByRole("figure", { name: "04/10: 5 hilang, 3 ditemukan" })).toBeInTheDocument();
     });
 
     it("tidak memuat ulang statistik saat periode diganti", async () => {
@@ -182,7 +182,7 @@ describe("StatsSection", () => {
   it("menampilkan kunci apa adanya jika formatnya tidak dikenali", () => {
     renderStats({ daily: { stats_losts: { minggu1: 1 }, stats_founds: {} } });
 
-    expect(screen.getByRole("img", { name: "minggu1: 1 hilang, 0 ditemukan" })).toBeInTheDocument();
-    expect(within(screen.getByRole("img")).getByText("1", { selector: "span" })).toBeInTheDocument();
+    expect(screen.getByRole("figure", { name: "minggu1: 1 hilang, 0 ditemukan" })).toBeInTheDocument();
+    expect(within(screen.getByRole("figure")).getByText("1", { selector: "span" })).toBeInTheDocument();
   });
 });

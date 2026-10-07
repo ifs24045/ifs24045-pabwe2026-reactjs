@@ -1,5 +1,4 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { fireEvent, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "../../../test-utils";
 import ChangeModal from "./ChangeModal";
@@ -126,15 +125,16 @@ describe("ChangeModal", () => {
       expect(onClose).not.toHaveBeenCalled();
     });
 
-    it("memanggil onClose saat latar belakang diklik, tetapi tidak saat dialog diklik", () => {
+    it("memanggil onClose saat latar belakang diklik, tetapi tidak saat dialog diklik", async () => {
+      const user = userEvent.setup();
       const { onClose } = renderModal();
 
-      fireEvent.mouseDown(screen.getByRole("dialog"));
+      await user.click(screen.getByRole("dialog"));
       expect(onClose).not.toHaveBeenCalled();
 
-      fireEvent.mouseDown(screen.getByRole("dialog").parentElement);
+      await user.click(screen.getByRole("button", { name: "Tutup latar belakang" }));
       expect(onClose).toHaveBeenCalledTimes(1);
-    });
+      });
   });
 
   describe("validasi", () => {

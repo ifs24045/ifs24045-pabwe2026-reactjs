@@ -120,13 +120,14 @@ describe("AddModal", () => {
       expect(onClose).not.toHaveBeenCalled();
     });
 
-    it("memanggil onClose saat latar belakang diklik", () => {
+    it("memanggil onClose saat latar belakang diklik", async () => {
+      const user = userEvent.setup();
       const { onClose } = renderModal();
 
-      fireEvent.mouseDown(screen.getByRole("dialog").parentElement);
+      await user.click(screen.getByRole("button", { name: "Tutup latar belakang" }));
 
       expect(onClose).toHaveBeenCalledTimes(1);
-    });
+      }); 
 
     it("tidak menutup modal saat klik di dalam dialog", () => {
       const { onClose } = renderModal();
